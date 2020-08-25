@@ -7,7 +7,7 @@ from scipy.stats.stats import pearsonr
 
 pathDLA = "D:\\Daniel\\Documents\\magister\\eksperymenty\\data\\dla\\CSV"
 pathFalls = "D:\\Daniel\\Documents\\magister\\eksperymenty\\data\\falls\\CSV"
-pathResultFile = "D:\\Daniel\\Documents\\magister\\eksperymenty\\data\\all_features.csv"
+pathResultFile = "D:\\Daniel\\Documents\\magister\\eksperymenty\\data\\single_features.csv"
 
 frameDuration = 6 #frame duration in seconds
 
@@ -15,8 +15,8 @@ frameDuration = 6 #frame duration in seconds
 files = os.listdir(pathDLA)
 with open(pathResultFile, 'w', newline='') as resultfile:
     writer = csv.writer(resultfile, delimiter=';')
-    writer.writerow(["FE1W", "FE1P", "FE2W", "FE2P", "FE3W", "FE3P", "FE4W", "FE4P", "FE7XW", "FE7XP", "FE7YW", "FE7YP", "FE7ZW", "FE7ZP", "FE8XW", "FE8XP", "FE8YW", "FE8YP", "FE8ZW", "FE8ZP", "FE9XW", "FE9XP", "FE9YW", "FE9YP", "FE9ZW", "FE9ZP",
-                     "FE10XW", "FE10XP", "FE10YW", "FE10YP", "FE10ZW", "FE10ZP", "FE11XW", "FE11XP", "FE11YW", "FE11YP", "FE11ZW", "FE11ZP", "F12XW", "F12XP", "F12YW", "F12YP", "F12ZW", "F12ZP", "F5W", "F5P", "F6W", "F6P", "Y"])
+    writer.writerow(["FE7XW", "FE7XP", "FE7YW", "FE7YP", "FE7ZW", "FE7ZP", "FE8XW", "FE8XP", "FE8YW", "FE8YP", "FE8ZW", "FE8ZP", "FE9XW", "FE9XP", "FE9YW", "FE9YP", "FE9ZW", "FE9ZP",
+                     "FE10XW", "FE10XP", "FE10YW", "FE10YP", "FE10ZW", "FE10ZP", "FE11XW", "FE11XP", "FE11YW", "FE11YP", "FE11ZW", "FE11ZP", "F12XW", "F12XP", "F12YW", "F12YP", "F12ZW", "F12ZP", "Y"])
 
     for filename in files:
         xw = []
@@ -73,15 +73,12 @@ with open(pathResultFile, 'w', newline='') as resultfile:
                 x = row[0]
                 y = row[1]
                 z = row[2]
-            writer.writerow([max(magw), max(magp), pearsonr(xw, yw)[0], pearsonr(xp, yp)[0], pearsonr(xw, zw)[0], pearsonr(xp, zp)[0], pearsonr(yw, zw)[0], pearsonr(yp, zp)[0],
-                             statistics.mean(xw), statistics.mean(xp), statistics.mean(yw), statistics.mean(yp), statistics.mean(zw), statistics.mean(zp),
+            writer.writerow([statistics.mean(xw), statistics.mean(xp), statistics.mean(yw), statistics.mean(yp), statistics.mean(zw), statistics.mean(zp),
                              statistics.variance(xw), statistics.variance(xp), statistics.variance(yw), statistics.variance(yp), statistics.variance(zw), statistics.variance(zp),
                              statistics.stdev(xw), statistics.stdev(xp), statistics.stdev(yw), statistics.stdev(yp), statistics.stdev(zw), statistics.stdev(zp),
                              sum(np.absolute(xw)), sum(np.absolute(xp)), sum(np.absolute(yw)), sum(np.absolute(yp)), sum(np.absolute(zw)), sum(np.absolute(zp)),
                              (max(xw) - min(xw)), (max(xp) - min(xp)), (max(yw) - min(yw)), (max(yp) - min(yp)), (max(zw) - min(zw)), (max(zp) - min(zp)),
-                             max(jerkxw), max(jerkxp), max(jerkyw), max(jerkyp), max(jerkzw), max(jerkzp),
-                             np.linalg.norm([statistics.stdev(xw), statistics.stdev(zw)]), np.linalg.norm([statistics.stdev(xp), statistics.stdev(zp)]),
-                             np.linalg.norm([statistics.stdev(xw), statistics.stdev(yw), statistics.stdev(zw)]), np.linalg.norm([statistics.stdev(xp), statistics.stdev(yp), statistics.stdev(zp)]), "0"])
+                             max(jerkxw), max(jerkxp), max(jerkyw), max(jerkyp), max(jerkzw), max(jerkzp), "0"])
     resultfile.close();
 
 #Falls
@@ -144,13 +141,10 @@ with open(pathResultFile, 'a+', newline='') as resultfile:
                 x = row[0]
                 y = row[1]
                 z = row[2]
-            writer.writerow([max(magw), max(magp), pearsonr(xw, yw)[0], pearsonr(xp, yp)[0], pearsonr(xw, zw)[0], pearsonr(xp, zp)[0], pearsonr(yw, zw)[0], pearsonr(yp, zp)[0],
-                             statistics.mean(xw), statistics.mean(xp), statistics.mean(yw), statistics.mean(yp), statistics.mean(zw), statistics.mean(zp),
+            writer.writerow([statistics.mean(xw), statistics.mean(xp), statistics.mean(yw), statistics.mean(yp), statistics.mean(zw), statistics.mean(zp),
                              statistics.variance(xw), statistics.variance(xp), statistics.variance(yw), statistics.variance(yp), statistics.variance(zw), statistics.variance(zp),
                              statistics.stdev(xw), statistics.stdev(xp), statistics.stdev(yw), statistics.stdev(yp), statistics.stdev(zw), statistics.stdev(zp),
                              sum(np.absolute(xw)), sum(np.absolute(xp)), sum(np.absolute(yw)), sum(np.absolute(yp)), sum(np.absolute(zw)), sum(np.absolute(zp)),
                              (max(xw) - min(xw)), (max(xp) - min(xp)), (max(yw) - min(yw)), (max(yp) - min(yp)), (max(zw) - min(zw)), (max(zp) - min(zp)),
-                             max(jerkxw), max(jerkxp), max(jerkyw), max(jerkyp), max(jerkzw), max(jerkzp),
-                             np.linalg.norm([statistics.stdev(xw), statistics.stdev(zw)]), np.linalg.norm([statistics.stdev(xp), statistics.stdev(zp)]),
-                             np.linalg.norm([statistics.stdev(xw), statistics.stdev(yw), statistics.stdev(zw)]), np.linalg.norm([statistics.stdev(xp), statistics.stdev(yp), statistics.stdev(zp)]), "1"])
+                             max(jerkxw), max(jerkxp), max(jerkyw), max(jerkyp), max(jerkzw), max(jerkzp), "1"])
     resultfile.close();
