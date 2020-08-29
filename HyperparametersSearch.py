@@ -3,6 +3,7 @@ import csv
 import random
 import metrics
 import pickle
+import statistics
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -35,7 +36,7 @@ results = []
 
 
 #SVM
-
+"""
 kernel = ['linear', 'poly', 'rbf', 'sigmoid']
 probability = [1, 0] #true, false
 C = [0.25, 0.5, 1, 10, 100]
@@ -47,7 +48,7 @@ for ker in kernel:
                               columns=columns)  # change nr of columns in file
             y = data[:, 48]  # last column in file
             X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.2, random_state=0)
-            clf = LogisticRegression(solver=sol, max_iter=mi, C=c).fit(X_train, y_train)
+            clf = svm.SVC(kernel=ker, C=c, probability=prob).fit(X_train, y_train)
             y_pred = clf.predict(X_test)
             results.append("kernel " + ker + ", probability " + str(prob) + ", C " + str(c) + ", accuracy " + str(
                 metrics.accuracy_score(y_test, y_pred, normalize=True)) + ", precision " + str(
@@ -56,7 +57,7 @@ for ker in kernel:
 
 for res in results:
     print(res)
-
+"""
 #Logistic Regression
 """
 solver = ['liblinear']
@@ -100,9 +101,8 @@ for ne in n_estimators:
 for res in results:
     print(res)
 """
-
 #Decision Tree
-
+"""
 criterion = ['gini', 'entropy']
 max_features = ['auto', 'sqrt', 'log2']
 min_samples_leaf = [ 1, 2, 3, 4, 5]
@@ -122,9 +122,9 @@ for crit in criterion:
 
 for res in results:
     print(res)
+"""
 
-
-def cross_validation(clf):
+def cross_validation_whole():
     X_train = []
     X_test = []
     y_train = []
@@ -132,12 +132,37 @@ def cross_validation(clf):
 
     indexes = [ [0, 36], [37, 73], [74, 110], [111, 146], [147, 182], [183, 216], [217, 253],[254, 290], [291, 328], [329,365]] #indexes of specified groups
 
+    res_accuracy = []
+    res_precision = []
+
     for i in range(0,10):
         X_test = data[np.arange(indexes[i][0], indexes[i][1]+1), :48]
+        X_test = X_test[:, [0, 1, 38, 39, 40, 41, 42, 43]] #F1+F12
         X_test = X_test.astype(np.float64)
         X_train = np.delete(data, np.arange(indexes[i][0],indexes[i][1]+1), axis=0)[:, :48]
+        X_train = X_train[:, [0, 1, 38, 39, 40, 41, 42, 43]] #F1+F12
         X_train = X_train.astype(np.float64)
         y_test = data[np.arange(indexes[i][0], indexes[i][1]+1), 48]
         y_train = np.delete(data, np.arange(indexes[i][0],indexes[i][1]+1), axis=0)[:, 48]
-        print(clf.score(X_test, y_test))
+        #clf = svm.SVC(kernel='rbf', probability=0, C=1).fit(X_train, y_train)
+        #clf = LogisticRegression(solver='liblinear', C=10).fit(X_train, y_train)
+        clf = RandomForestClassifier(criterion='gini', n_estimators=10, min_samples_leaf=1).fit(X_train, y_train)
+        #clf = DecisionTreeClassifier(criterion='entropy', max_features='auto', min_samples_leaf=2).fit(X_train, y_train)
+        y_pred = clf.predict(X_test)
+        res_accuracy.append(metrics.accuracy_score(y_test, y_pred, normalize=True))
+        res_precision.append(metrics.precision_score(y_test, y_pred, pos_label="1"))
+    res_accuracy = np.array(res_accuracy)
+    res_precision = np.array(res_precision)
+    print(res_accuracy.min())
+    print(statistics.median(res_accuracy))
+    print(res_accuracy.max())
+    print(res_precision.min())
+    print(statistics.median(res_precision))
+    print(res_precision.max())
+    print("max acc: " + str(res_accuracy.max()) + " min acc: " + str(res_accuracy.min()) + " mediana acc: " + str(statistics.median(res_accuracy)))
+    print("max prec: " + str(res_precision.max()) + " min prec: " + str(res_precision.min()) + " mediana prec: " + str(statistics.median(res_precision)))
+
+
+
+cross_validation_whole()
 
