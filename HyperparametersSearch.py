@@ -78,7 +78,6 @@ for res in results:
     print(res)
 """
 #Ranfom Forest
-"""
 n_estimators = [10, 20, 50, 100, 200, 500, 1000]
 criterion = ['gini', 'entropy']
 max_features = ['auto', 'sqrt', 'log2']
@@ -92,15 +91,21 @@ for ne in n_estimators:
                                   columns=columns)  # change nr of columns in file
                 y = data[:, 48]  # last column in file
                 X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.2, random_state=0)
-                clf = RandomForestClassifier(n_estimators=ne, criterion=crit, max_features=mf, min_samples_leaf=msl).fit(X_train, y_train)
+                clf = RandomForestClassifier(n_estimators=ne, criterion=crit, max_features=mf, min_samples_leaf=msl)
+                clf.fit(X_train, y_train)
                 y_pred = clf.predict(X_test)
-                results.append("criterion " + crit + ", n_estimators " + str(ne) + ", max_features " + mf + ", min_samples_leaf " + str(msl) + ", accuracy " + str(
-                    metrics.accuracy_score(y_test, y_pred, normalize=True)) + ", precision " + str(
+                results.append("criterion " + crit +
+                               ", n_estimators " + str(ne) +
+                               ", max_features " + mf +
+                               ", min_samples_leaf " + str(msl) +
+                               ", accuracy " + str(
+                    metrics.accuracy_score(y_test, y_pred, normalize=True)) +
+                               ", precision " + str(
                     metrics.precision_score(y_test, y_pred, pos_label="1")))
 
 for res in results:
     print(res)
-"""
+
 #Decision Tree
 """
 criterion = ['gini', 'entropy']
